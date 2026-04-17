@@ -1,3 +1,9 @@
+📄Passo a passo de como Treinar IA no Kaggle.
+
+📌Lembrando que é importante criar conta, e VEREFICAR NÚMERO DE TELEFONE para poder acessar a chave de Internet no Kaggle.
+
+
+
 <img width="900" height="611" alt="image" src="https://github.com/user-attachments/assets/c358123f-d3a3-45be-94d6-2f28029d92b7" />
 
 
