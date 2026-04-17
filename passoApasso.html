@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial YOLOv8 no Kaggle</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --slide-bg: #1e1e1e;
+            --text-main: #f0f0f0;
+            --text-muted: #aaaaaa;
+            --primary: #20b2aa; /* Light Sea Green */
+            --primary-hover: #178a84;
+            --code-bg: #0d0d0d;
+            --border-color: #333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 90%;
+            max-width: 900px;
+            background-color: var(--slide-bg);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            height: 80vh;
+            border: 1px solid var(--border-color);
+        }
+
+        .slide-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            color: #fff;
+        }
+
+        p, li {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .image-placeholder {
+            background-color: #2a2a2a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.05rem;
+            color: #00ff00; /* Estilo terminal */
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .warning-box {
+            background-color: rgba(255, 193, 7, 0.15);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+
+        .warning-box strong {
+            color: #ffc107;
+        }
+
+        /* Controles Base */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #1a1a1a;
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 12px 12px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: var(--primary-hover);
+        }
+
+        button:disabled {
+            background-color: #444;
+            color: #777;
+            cursor: not-allowed;
+        }
+
+        .progress-indicator {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        /* Ícones e Badges */
+        .badge {
+            display: inline-block;
+            background: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin-right: 8px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+        
+        <div class="slide-area">
+            
+            <!-- Slide 1: Capa -->
+            <div class="slide active" id="slide-1">
+                <div style="text-align: center;">
+                    <div class="image-placeholder" style="border: none; background: transparent;">
+                        <h1></h1>
+                    </div>
+                    <h1 style="border: none; font-size: 2.8rem; margin-bottom: 10px;">Treinamento de IA no Kaggle</h1>
+                    <h2 style="color: var(--text-muted);">Passo a Passo com Roboflow e YOLOv8</h2>
+                    <p style="margin-top: 30px;">Clique em <strong>"Próximo"</strong> para começar o tutorial interativo.</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: Preparação -->
+            <div class="slide" id="slide-2">
+                <h1>Passo 0: Preparação Crucial do Kaggle</h1>
+                <p>Antes de rodar qualquer código, precisamos garantir que o Kaggle tenha poder de processamento e acesso à internet (para evitar o erro "Temporary failure in name resolution").</p>
+                
+                <div class="image-placeholder">
+                    
+                </div>
+                
+                <ul>
+                    <li><strong>1. Ative a GPU:</strong> No menu lateral direito, vá em <em>Notebook options > Accelerator</em> e escolha uma GPU (ex: <strong>GPU T4 x2</strong>).</li>
+                    <li><strong>2. Ligue a Internet:</strong> No mesmo menu, ative a chave <strong>Internet</strong>. <em>(Nota: pode ser necessário verificar seu celular na conta do Kaggle para liberar isso).</em></li>
+                </ul>
+            </div>
+
+            <!-- Slide 3: Instalação Ultralytics -->
+            <div class="slide" id="slide-3">
+                <h1>Passo 1: Instalar o Ultralytics</h1>
+                <p>O Ultralytics é a biblioteca oficial que contém os algoritmos do YOLOv8. Crie uma célula de código no Kaggle e insira o comando abaixo:</p>
+                
+                <pre>!pip install ultralytics</pre>
+                
+                <div class="warning-box">
+                    <strong>💡 Dica:</strong> O sinal de exclamação (<code>!</code>) antes do <code>pip</code> é necessário no Kaggle para avisar que este é um comando de instalação do sistema, e não um código Python normal.
+                </div>
+                <p>Clique no botão de "Play" ao lado da célula e aguarde a instalação terminar (os textos devem rodar sem erros vermelhos ou amarelos agora que a internet está ligada).</p>
+            </div>
+
+            <!-- Slide 4: Download Roboflow -->
+            <div class="slide" id="slide-4">
+                <h1>Passo 2: Importar o Dataset do Roboflow</h1>
+                <p>Agora vamos instalar a biblioteca do Roboflow e baixar o seu projeto específico de Equipamentos de Proteção Individual (EPI). Em uma <strong>nova célula</strong>, cole este código e rode:</p>
+                
+<pre>!pip install roboflow
+
+from roboflow import Roboflow
+rf = Roboflow(api_key="SUA_CHAVE_DE_API")
+project = rf.workspace("NOME_DA_WORKSPACE").project("NOME_DO_PROJETO")
+version = project.version(NUMERO_DA_VERSAO_DO_PROJETO)
+dataset = version.download("yolov8")</pre>
+
+                <div class="warning-box">
+                    <strong>⚠️ Aviso de Segurança:</strong> Sua <code>api_key</code> funciona como uma senha. Como este notebook é para você, não há problema, mas evite compartilhar notebooks públicos contendo essa chave visível.
+                </div>
+            </div>
+
+            <!-- Slide 5: Treinamento -->
+            <div class="slide" id="slide-5">
+                <h1>Passo 3: Iniciar o Treinamento da IA</h1>
+                <p>Finalmente, na <strong>terceira célula</strong>, vamos iniciar o treinamento. Note que usamos <code>dataset.location</code> para evitar o erro de "arquivo não encontrado" que tivemos antes!</p>
+                
+<pre># Inicia o treinamento
+from ultralytics import YOLO
+
+# Carrega um modelo pré-treinado leve (n = nano)
+model = YOLO('yolov8n.pt') 
+
+# Usamos f"{dataset.location}/data.yaml" para encontrar a pasta exata automaticamente
+results = model.train(data=f"{dataset.location}/data.yaml", epochs=300, imgsz=640)</pre>
+                
+                <ul>
+                    <li><span class="badge">epochs=300</span> A IA vai estudar suas imagens 300 vezes.</li>
+                    <li><span class="badge">imgsz=640</span> As imagens serão redimensionadas para 640x640 pixels durante o treino.</li>
+                </ul>
+            </div>
+
+            <!-- Slide 6: Acessando as Pastas (NOVO) -->
+            <div class="slide" id="slide-6">
+                <h1>Passo 4: Acessar os Arquivos e Resultados</h1>
+                <p>O YOLO salva automaticamente o "cérebro" da sua IA e vários gráficos de desempenho enquanto treina. Você pode ver e baixar isso diretamente no Kaggle!</p>
+                
+                <div class="image-placeholder">
+                                    </div>
+                
+                <p><strong>Como encontrar seu modelo treinado:</strong></p>
+                <ul>
+                    <li>Olhe para o <strong>painel lateral direito</strong> (o mesmo onde você ligou a internet).</li>
+                    <li>Role para baixo até encontrar a aba <strong>Output</strong> e clique na setinha para expandir a pasta <code>/kaggle/working</code>.</li>
+                    <li>Siga este caminho de pastas: <code>runs</code> ➔ <code>detect</code> ➔ <code>train</code> (pode estar como train2, train3, caso tenha rodado mais de uma vez).</li>
+                    <li>Abra a pasta <strong>weights</strong>. Lá dentro você encontrará o arquivo <strong><span style="color: var(--primary);">best.pt</span></strong>. Você pode clicar nos três pontinhos ao lado dele para baixar o seu modelo final!</li>
+                </ul>
+            </div>
+
+            <!-- Slide 7: Conclusão -->
+            <div class="slide" id="slide-7">
+                <div style="text-align: center;">
+                    <h1>🎉 Tudo Pronto!</h1>
+                    <div class="image-placeholder">
+                        
+                    </div>
+                    <p>Agora é só esperar! O treinamento de 300 épocas (epochs) pode demorar alguns minutos ou horas, dependendo do tamanho do seu dataset.</p>
+                    <p>Ao final, os resultados e o arquivo final da sua IA treinada (chamado <code>best.pt</code>) estarão salvos na pasta <strong>/kaggle/working/runs/detect/train/weights/</strong>.</p>
+                    <p style="color: var(--primary); font-weight: bold; margin-top: 30px;">Bom treinamento, Beatriz!</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Controles de Navegação -->
+        <div class="controls">
+            <button id="btn-prev" onclick="changeSlide(-1)" disabled>Anterior</button>
+            <div class="progress-indicator" id="progress">Slide 1 de 7</div>
+            <button id="btn-next" onclick="changeSlide(1)">Próximo</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+
+        function updateUI() {
+            // Atualiza visibilidade dos slides
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                if (index + 1 === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Atualiza botões
+            document.getElementById('btn-prev').disabled = currentSlide === 1;
+            
+            const btnNext = document.getElementById('btn-next');
+            if (currentSlide === totalSlides) {
+                btnNext.disabled = true;
+            } else {
+                btnNext.disabled = false;
+                btnNext.innerText = "Próximo";
+            }
+
+            // Atualiza texto de progresso
+            document.getElementById('progress').innerText = `Slide ${currentSlide} de ${totalSlides}`;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateUI();
+        }
+    </script>
+</body>
+</html>
